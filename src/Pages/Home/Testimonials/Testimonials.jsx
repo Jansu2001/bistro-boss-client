@@ -1,0 +1,50 @@
+import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import { useEffect, useState } from "react";
+
+// React Rating
+import { Rating } from "@smastrom/react-rating";
+import "@smastrom/react-rating/style.css";
+
+const Testimonials = () => {
+  const [testiMonials, setTestiMonials] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/review")
+      .then((res) => res.json())
+      .then((data) => setTestiMonials(data));
+  }, []);
+
+  return (
+    <section className="my-20">
+      <SectionTitle
+        subTitle="What Our Client Say"
+        title="TESTIMONIAL"
+      ></SectionTitle>
+      <div>
+        <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+          {testiMonials.map((testi) => (
+            <SwiperSlide key={testi._id}>
+              <div className="m-24 flex flex-col items-center mx-24 my-16 text-center">
+                <Rating
+                  style={{ maxWidth: 180 }}
+                  value={testi.rating}
+                  readOnly
+                />
+                
+                <p className="py-8">{testi.details}</p>
+                <h3 className="text-2xl text-orange-400">{testi.name}</h3>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </section>
+  );
+};
+
+export default Testimonials;
