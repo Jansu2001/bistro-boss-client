@@ -1,14 +1,40 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import {  Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProviders/AuthProviders";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Header = () => {
+
+  const {user,signInOutUser}=useContext(AuthContext)
+
+  const handleLogOUt=()=>{
+    signInOutUser()
+    .then(()=>{
+
+    })
+    .catch(error=>{
+      console.log(error.message);
+    })
+  }
+
   const navItems = (
     <>
-      <li><Link to="/">HOME</Link></li>
-      <li><Link to="/contact">CONTACT US</Link></li>
-      <li><Link to="/dashboard">DASHBOARD</Link></li>
-      <li> <Link to="/menu">OUR MENU</Link></li>
-      <li> <Link to="/order/salad">ORDER FOOD</Link></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/">HOME</NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/contact">CONTACT US</NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/secret">SECRET</NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/dashboard">DASHBOARD</NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/cart"><button className="btn gap-2"><FaShoppingCart></FaShoppingCart> <div className="badge badge-primary">+0</div></button></NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/menu">OUR MENU</NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/order/salad">ORDER FOOD</NavLink></li>
+      {user 
+      ? 
+      <li><button onClick={handleLogOUt} className="btn btn-ghost text-red-400">LOG OUT</button></li>
+      :
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/login">LOGIN</NavLink></li>
+      }
     </>
+
+    
   );
   return (
     <div className="navbar bg-black text-white max-w-screen-xl fixed z-10 bg-opacity-30">
@@ -38,8 +64,8 @@ const Header = () => {
           </ul>
         </div>
         <div>
-          <a className="btn btn-ghost normal-case text-xl">Bistro Boss</a>
-          {/* <p>Resturant</p> */}
+          <Link to='/' className="btn btn-ghost normal-case  lg:text-2xl ">Bistro Boss</Link>
+          <small>Resturant</small>
         </div>
       </div>
       <div className="navbar-end">
