@@ -1,16 +1,16 @@
-import { Children, useContext } from "react";
+import {  useContext } from "react";
 import { AuthContext } from "../Providers/AuthProviders/AuthProviders";
 import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoutes = () => {
+const PrivateRoutes = ({children}) => {
   const { user, loading } = useContext(AuthContext);
 
   const location=useLocation()
   if (loading) {
-    return <p>Loading.........</p>
+    return <progress className="progress w-56" value="100" max="100"></progress>
   }
    else if (user) {
-    return Children;
+    return children
   }
    else {
     return <Navigate to="/login" state={{from: location}} replace></Navigate>;
@@ -18,3 +18,4 @@ const PrivateRoutes = () => {
 };
 
 export default PrivateRoutes;
+

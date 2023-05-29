@@ -2,10 +2,12 @@ import { useContext } from "react";
 import {  Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders/AuthProviders";
 import { FaShoppingCart } from "react-icons/fa";
+import useCarts from "../../../Hooks/useCarts";
 
 const Header = () => {
 
   const {user,signInOutUser}=useContext(AuthContext)
+  const [cart]=useCarts()
 
   const handleLogOUt=()=>{
     signInOutUser()
@@ -23,7 +25,7 @@ const Header = () => {
       <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/contact">CONTACT US</NavLink></li>
       <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/secret">SECRET</NavLink></li>
       <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/dashboard">DASHBOARD</NavLink></li>
-      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/cart"><button className="btn gap-2"><FaShoppingCart></FaShoppingCart> <div className="badge badge-primary">+0</div></button></NavLink></li>
+      <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="dashboard/carts"><button className="btn gap-2"><FaShoppingCart></FaShoppingCart> <div className="badge badge-primary">+{cart?.length ||0 }</div></button></NavLink></li>
       <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/menu">OUR MENU</NavLink></li>
       <li><NavLink className={({isActive})=>isActive?'text-orange-400 font-bold':''} to="/order/salad">ORDER FOOD</NavLink></li>
       {user 

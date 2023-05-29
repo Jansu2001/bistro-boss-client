@@ -4,6 +4,7 @@ import cardimg from '../../assets/menu/pizza-bg.jpg'
 import { AuthContext } from '../../Providers/AuthProviders/AuthProviders';
 import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useCarts from '../../Hooks/useCarts';
 
 const FoodCard = ({ item }) => {
   const { name, recipe, price, image,_id } = item;
@@ -11,6 +12,7 @@ const FoodCard = ({ item }) => {
 
   const navigate=useNavigate()
   const location=useLocation()
+  const [,refetch]=useCarts()
 
   const handleAddToCart=(items)=>{
     console.log(items);
@@ -27,6 +29,7 @@ const FoodCard = ({ item }) => {
       .then(res=>res.json())
       .then(data=>{
         if(data.insertedId){
+          refetch()
           Swal.fire({
             position: 'top-end',
             icon: 'success',

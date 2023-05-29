@@ -4,9 +4,13 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import SocialLogin from "../socialLogin/SocialLogin";
 import { AuthContext } from "../../../Providers/AuthProviders/AuthProviders";
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 const Register = () => {
-  const { signUpUser,displayUser } = useContext(AuthContext);
+  const [error,setError]=useState('')
+  const [success,setSuccess]=useState('')
+  const { signUpUser, displayUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -14,26 +18,51 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  
   const onSubmit = (data) => {
     console.log(data);
     const email = data.email;
     const password = data.password;
     signUpUser(email, password)
-      .then((result) => {
-        const createdUser = result.user;
-        console.log(createdUser);
+    .then(result => {
+      const createdUser = result.user;
+      console.log(createdUser);
+      setError('')
+      setSuccess('User SuccessFully Created')
         displayUser(data.name, data.photoURL)
-        .then(()=>{
-          console.log('user profule info updated');
-          reset()
-          navigate('/')
-        })
+        .then(() => {
+          const savedUser = {
+            name: data.name,
+            email: data.email,
+            password: data.password
+          };
+          fetch('http://localhost:5000/users', {
+            method: "POST",
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(savedUser)
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.insertedId) {
+                console.log("user profile info updated");
+                
+                reset();
+                Swal.fire(
+                  "Account Created!",
+                  "Your Account has been Registered.",
+                  "success"
+                );
+                navigate("/");
+              }
+            });
+        });
       })
       .catch((error) => {
-        console.log(error.message);
+        setError(error.message);
+        console.log(error);
       });
   };
 
@@ -126,6 +155,8 @@ const Register = () => {
                     Forgot password?
                   </a>
                 </label>
+                  <span>{error}</span>
+                  <span>{success}</span>
               </div>
               <div className="form-control mt-6">
                 <input
@@ -140,7 +171,7 @@ const Register = () => {
                   Go to Log in
                 </Link>
               </p>
-              <SocialLogin></SocialLogin>
+              <SocialLogin setSuccess={setSuccess} setError={setError}></SocialLogin>
             </form>
           </div>
         </div>
