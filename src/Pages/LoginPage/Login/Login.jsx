@@ -13,6 +13,8 @@ import Swal from "sweetalert2";
 import SocialLogin from "../socialLogin/SocialLogin";
 
 const Login = () => {
+  const [error,setError]=useState('')
+  const [success,setSuccess]=useState('')
   const [disabled, setDisabled] = useState(true);
   const {  signInUser } = useContext(AuthContext);
 
@@ -30,6 +32,8 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         console.log(user);
+        setError('')
+      setSuccess('User SuccessFully Logged In')
         Swal.fire({
           title: `User Login SuccessFul`,
           showClass: {
@@ -43,6 +47,7 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error.message);
+        setError(error.message);
       });
   };
 
@@ -110,6 +115,8 @@ const Login = () => {
                     Forgot password?
                   </a>
                 </label>
+                <span>{error}</span>
+                  <span>{success}</span>
               </div>
               <div className="form-control mt-6">
                 <input
@@ -125,7 +132,7 @@ const Login = () => {
                   Create a New Account
                 </Link>
               </p>
-              <SocialLogin></SocialLogin>
+              <SocialLogin setSuccess={setSuccess} setError={setError}></SocialLogin>
             </form>
           </div>
         </div>

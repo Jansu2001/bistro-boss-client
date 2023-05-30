@@ -1,12 +1,15 @@
 import { FaCalendar, FaHome, FaShoppingCart, FaWallet } from "react-icons/fa";
 import {  NavLink, Outlet } from "react-router-dom";
 import useCarts from "../Hooks/useCarts";
+import useAdmin from "../Hooks/useAdmin";
 
 const Dashboard = () => {
   const [cart]=useCarts()
-
   // TODO : Load data from the server to have dynamic isAdmin based on data
-  const isAdmin=true
+
+  const [isAdmin]=useAdmin()
+  
+
   return (
     <div>
       <div className="drawer drawer-mobile">
@@ -38,7 +41,7 @@ const Dashboard = () => {
               
               :
               <>
-              <li><NavLink to='/dashboard/home'><FaHome></FaHome>User Home</NavLink></li>
+              <li><NavLink to='/dashboard/userhome'><FaHome></FaHome>User Home</NavLink></li>
             <li><NavLink to='/dashboard/reservation'><FaCalendar></FaCalendar>Reservation</NavLink></li>
             <li><NavLink to='/dashboard/payhistory'><FaWallet></FaWallet>Payment History</NavLink></li>
             <li><NavLink to='/dashboard/carts'><FaShoppingCart></FaShoppingCart>My Cart<span className="badge badge-primary">+{cart?.length ||0 }</span> </NavLink></li>
